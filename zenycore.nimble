@@ -24,6 +24,7 @@ task rocksdb, "Build RocksDB":
     exec "CFLAGS=-Wno-error CPLUS_INCLUDE_PATH=./$(basename lz4-*/)/lib ROCKSDB_DISABLE_SNAPPY=1 ROCKSDB_DISABLE_ZLIB=1 ROCKSDB_DISABLE_BZIP=1 ROCKSDB_DISABLE_ZSTD=1 make -j$(nproc) static_lib"
     exec "mkdir -p ../../src/zenycore/deps/rocksdb"
     exec "cp librocksdb.a ../../src/zenycore/deps/rocksdb/"
+    exec "cp liblz4.a ../../src/zenycore/deps/rocksdb/"
 
 
 before install:
