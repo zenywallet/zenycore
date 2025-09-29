@@ -35,7 +35,25 @@ task rocksdbDefault, "Build RocksDB (Default)":
     exec "cp librocksdb.a ../../src/zenycore/deps/rocksdb/"
     exec "cp libsnappy.a ../../src/zenycore/deps/rocksdb/"
 
+import std/os
+import std/strutils
+
+task sophia, "Build Sophia":
+  withDir "deps/sophia":
+    var ss_lz4filter = "sophia/std/ss_lz4filter.c"
+    exec "git checkout " & ss_lz4filter
+    var s = readFile(ss_lz4filter)
+    s = s.replace("LZ4", "ss_LZ4")
+    s = s.replace("XXH32", "ss_XXH32")
+    s = s.replace("XXH64", "ss_XXH64")
+    writeFile(ss_lz4filter, s)
+    exec "make -j$(nproc)"
+    exec "mkdir -p ../../src/zenycore/deps/sophia"
+    exec "cp libsophia.a ../../src/zenycore/deps/sophia/"
+
 
 before install:
   if not fileExists("src/zenycore/deps/rocksdb/librocksdb.a"):
     rocksdbTask()
+  if not fileExists("src/zenycore/deps/sophia/libsophia.a"):
+    sophiaTask()
