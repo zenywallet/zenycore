@@ -20,8 +20,8 @@ requires "nim >= 2.2.4"
 task rocksdb, "Build RocksDB":
   withDir "deps/rocksdb":
     exec "make clean"
-    exec "DEBUG_LEVEL=0 make -j$(nproc) liblz4.a"
-    exec "CFLAGS=-Wno-error CPLUS_INCLUDE_PATH=./$(basename lz4-*/)/lib ROCKSDB_DISABLE_SNAPPY=1 ROCKSDB_DISABLE_ZLIB=1 ROCKSDB_DISABLE_BZIP=1 ROCKSDB_DISABLE_ZSTD=1 make -j$(nproc) static_lib"
+    exec "DEBUG_LEVEL=0 make -j$(nproc --all || sysctl -n hw.ncpu || getconf _NPROCESSORS_ONLN || echo 1) liblz4.a"
+    exec "CFLAGS=-Wno-error CPLUS_INCLUDE_PATH=./$(basename lz4-*/)/lib ROCKSDB_DISABLE_SNAPPY=1 ROCKSDB_DISABLE_ZLIB=1 ROCKSDB_DISABLE_BZIP=1 ROCKSDB_DISABLE_ZSTD=1 make -j$(nproc --all || sysctl -n hw.ncpu || getconf _NPROCESSORS_ONLN || echo 1) static_lib"
     exec "mkdir -p ../../src/zenycore/deps/rocksdb"
     exec "cp -a librocksdb.a ../../src/zenycore/deps/rocksdb/"
     exec "cp -a liblz4.a ../../src/zenycore/deps/rocksdb/"
@@ -29,8 +29,8 @@ task rocksdb, "Build RocksDB":
 task rocksdbDefault, "Build RocksDB (Default)":
   withDir "deps/rocksdb":
     exec "make clean"
-    exec "DEBUG_LEVEL=0 make -j$(nproc) libsnappy.a"
-    exec "CFLAGS=-Wno-error ROCKSDB_DISABLE_LZ4=1 ROCKSDB_DISABLE_ZLIB=1 ROCKSDB_DISABLE_BZIP=1 ROCKSDB_DISABLE_ZSTD=1 make -j$(nproc) static_lib"
+    exec "DEBUG_LEVEL=0 make -j$(nproc --all || sysctl -n hw.ncpu || getconf _NPROCESSORS_ONLN || echo 1) libsnappy.a"
+    exec "CFLAGS=-Wno-error ROCKSDB_DISABLE_LZ4=1 ROCKSDB_DISABLE_ZLIB=1 ROCKSDB_DISABLE_BZIP=1 ROCKSDB_DISABLE_ZSTD=1 make -j$(nproc --all || sysctl -n hw.ncpu || getconf _NPROCESSORS_ONLN || echo 1) static_lib"
     exec "mkdir -p ../../src/zenycore/deps/rocksdb"
     exec "cp -a librocksdb.a ../../src/zenycore/deps/rocksdb/"
     exec "cp -a libsnappy.a ../../src/zenycore/deps/rocksdb/"
@@ -47,7 +47,7 @@ task sophia, "Build Sophia":
     s = s.replace("XXH32", "ss_XXH32")
     s = s.replace("XXH64", "ss_XXH64")
     writeFile(ss_lz4filter, s)
-    exec "make -j$(nproc)"
+    exec "make -j$(nproc --all || sysctl -n hw.ncpu || getconf _NPROCESSORS_ONLN || echo 1)"
     exec "mkdir -p ../../src/zenycore/deps/sophia"
     exec "cp -a libsophia.a ../../src/zenycore/deps/sophia/"
 
