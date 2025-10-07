@@ -23,8 +23,8 @@ task rocksdb, "Build RocksDB":
     exec "DEBUG_LEVEL=0 make -j$(nproc) liblz4.a"
     exec "CFLAGS=-Wno-error CPLUS_INCLUDE_PATH=./$(basename lz4-*/)/lib ROCKSDB_DISABLE_SNAPPY=1 ROCKSDB_DISABLE_ZLIB=1 ROCKSDB_DISABLE_BZIP=1 ROCKSDB_DISABLE_ZSTD=1 make -j$(nproc) static_lib"
     exec "mkdir -p ../../src/zenycore/deps/rocksdb"
-    exec "cp librocksdb.a ../../src/zenycore/deps/rocksdb/"
-    exec "cp liblz4.a ../../src/zenycore/deps/rocksdb/"
+    exec "cp -a librocksdb.a ../../src/zenycore/deps/rocksdb/"
+    exec "cp -a liblz4.a ../../src/zenycore/deps/rocksdb/"
 
 task rocksdbDefault, "Build RocksDB (Default)":
   withDir "deps/rocksdb":
@@ -32,8 +32,8 @@ task rocksdbDefault, "Build RocksDB (Default)":
     exec "DEBUG_LEVEL=0 make -j$(nproc) libsnappy.a"
     exec "CFLAGS=-Wno-error ROCKSDB_DISABLE_LZ4=1 ROCKSDB_DISABLE_ZLIB=1 ROCKSDB_DISABLE_BZIP=1 ROCKSDB_DISABLE_ZSTD=1 make -j$(nproc) static_lib"
     exec "mkdir -p ../../src/zenycore/deps/rocksdb"
-    exec "cp librocksdb.a ../../src/zenycore/deps/rocksdb/"
-    exec "cp libsnappy.a ../../src/zenycore/deps/rocksdb/"
+    exec "cp -a librocksdb.a ../../src/zenycore/deps/rocksdb/"
+    exec "cp -a libsnappy.a ../../src/zenycore/deps/rocksdb/"
 
 import std/os
 import std/strutils
@@ -49,7 +49,7 @@ task sophia, "Build Sophia":
     writeFile(ss_lz4filter, s)
     exec "make -j$(nproc)"
     exec "mkdir -p ../../src/zenycore/deps/sophia"
-    exec "cp libsophia.a ../../src/zenycore/deps/sophia/"
+    exec "cp -a libsophia.a ../../src/zenycore/deps/sophia/"
 
 
 before install:
