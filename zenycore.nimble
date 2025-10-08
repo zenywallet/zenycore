@@ -51,9 +51,19 @@ task sophia, "Build Sophia":
     exec "mkdir -p ../../src/zenycore/deps/sophia"
     exec "cp -a libsophia.a ../../src/zenycore/deps/sophia/"
 
+task duckdb, "Build DuckDB":
+  withDir "deps/duckdb":
+    exec "make clean"
+    exec "make -j$(nproc --all || sysctl -n hw.ncpu || getconf _NPROCESSORS_ONLN || echo 1) bundle-library"
+    exec "mkdir -p ../../src/zenycore/deps/duckdb"
+    exec "cp -a build/release/libduckdb_bundle.a ../../src/zenycore/deps/duckdb/"
+    exec "cp -a build/release/src/libduckdb.so ../../src/zenycore/deps/duckdb/"
+
 
 before install:
   if not fileExists("src/zenycore/deps/rocksdb/librocksdb.a"):
     rocksdbTask()
   if not fileExists("src/zenycore/deps/sophia/libsophia.a"):
     sophiaTask()
+  if not fileExists("src/zenycore/deps/duckdb/libduckdb.so"):
+    duckdbTask()
